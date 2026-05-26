@@ -1,3 +1,5 @@
-data "aws_instance" "terraform_instance" {
-  instance_id = "i-0e5a3350b879cdced"
-}
+data "aws_ssm_parameter" "vpc_id" {
+    name = "/${var.project}/${var.environment}/vpc_id"
+    }
+
+    
