@@ -6,7 +6,7 @@ variable "environment" {
   default = "dev"
 }
 
-variable "sg_names"{
+variable "sg_names" {
   type = list(string)
   default = [
     #database security group
@@ -21,5 +21,5 @@ variable "sg_names"{
     "frontend_alb",
     #bastion host
     "bastion"
-    ]
+  ]
 }
