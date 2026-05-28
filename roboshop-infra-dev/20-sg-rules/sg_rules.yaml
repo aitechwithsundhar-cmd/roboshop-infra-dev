@@ -1,0 +1,21 @@
+bastion:
+- name: bastion_ssh # bastion accpeting connection from anywhere
+  port: 22
+  src: internet
+  dest : bastion
+
+mongodb:
+- name:mongodb_bastion # bastion accpeting connection from anywhere
+  port: 22
+  src: bastion
+  dest : mongodb
+
+- name: mongodb_catalogue # mongodb accpeting connection from catalogue 
+  port: 27017
+  src: catalogue
+  dest: mongodb
+
+- name: mongodb_user # mongodb accpeting connection from catalogue 
+  port: 27017
+  src: user
+  dest: mongodb
