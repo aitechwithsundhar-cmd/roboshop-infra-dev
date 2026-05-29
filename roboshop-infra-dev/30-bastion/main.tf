@@ -7,6 +7,14 @@ resource "aws_instance" "bastion" {
   root_block_device {
     volume_size = 50
     volume_type = "gp3"
+    # EBS volume tags 
+    tags = merge(
+      {
+        Name = "${var.project}-${var.environment}-bastion"
+      },
+      local.common_tags
+    )
+
   }
 
   tags = merge(
