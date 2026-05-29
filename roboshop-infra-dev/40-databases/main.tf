@@ -19,7 +19,7 @@ resource "terraform_data" "bootstrap" {
     connection {
         type        = "ssh"
         user        = "ec2-user"
-        password    = "DevOps@123"
+        password    = "DevOps123"
         host        = aws_instance.mongodb.private_ip
     }
     provisioner "file" {
