@@ -23,7 +23,7 @@ resource "terraform_data" "bootstrap" {
         host        = aws_instance.mongodb.public_ip
     }
     provisioner "file" {
-        source      = "bootstrap.sh"
+        source      = "bootstrap.sh",
         destination = "/tmp/bootstrap-host.sh"
     }
 
