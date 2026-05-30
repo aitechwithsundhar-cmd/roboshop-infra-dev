@@ -19,3 +19,19 @@ mongodb:
   port: 27017
   src: user
   dest: mongodb
+
+redis:
+- name: redis_bastion # bastion accpeting connection from anywhere
+  port: 22
+  src: bastion
+  dest : redis
+
+- name: redis_catalogue # redis accpeting connection from catalogue 
+  port: 6379
+  src: catalogue
+  dest: redis
+
+- name: redis_user # redis accpeting connection from catalogue 
+  port: 6379
+  src: user
+  dest: redis
