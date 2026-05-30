@@ -35,3 +35,30 @@ resource "aws_security_group_rule" "mongodb_user" {
   source_security_group_id = local.user_sg_id
   security_group_id        = local.mongodb_sg_id
 }
+
+resource "aws_security_group_rule" "redis_bastion" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.redis_sg_id
+}
+
+# resource "aws_security_group_rule" "redis_catalogue" {
+#   type                     = "ingress"
+#   from_port                = 6379
+#   to_port                  = 6379
+#   protocol                 = "tcp"
+#   source_security_group_id = local.catalogue_sg_id
+#   security_group_id        = local.redis_sg_id
+# }
+
+# resource "aws_security_group_rule" "redis_user" {
+#   type                     = "ingress"
+#   from_port                = 6379
+#   to_port                  = 6379
+#   protocol                 = "tcp"
+#   source_security_group_id = local.user_sg_id
+#   security_group_id        = local.redis_sg_id
+# }
