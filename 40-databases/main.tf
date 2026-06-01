@@ -109,3 +109,26 @@ resource "terraform_data" "bootstrap_mysql" {
   ]
 }
 }
+
+resource "terraform_data" "rabbitmq" {
+    triggers_replace = [
+        aws_instance.rabbitmq.id
+    ]
+    connection {
+        type        = "ssh"
+        user        = "ec2-user"
+        password    = "DevOps321"
+        host        = aws_instance.rabbitmq.private_ip
+    }
+    provisioner "file" {
+        source      = "bootstrap.sh"
+        destination = "/tmp/bootstrap-host.sh"
+    }
+
+    provisioner "remote-exec" {
+  inline = [
+    "chmod +x /tmp/bootstrap-host.sh",
+    "sudo sh /tmp/bootstrap-host.sh rabbitmq"
+  ]
+}
+}
