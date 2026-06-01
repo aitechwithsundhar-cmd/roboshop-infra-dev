@@ -21,16 +21,17 @@ resource "aws_iam_role" "mysql" {
     local.common_tags
   )
 }
-resource "aws_iam_role_policy_attachment" "mysql" {
- name      = local.mysql_policy_name
- description = " A policy for MySQL Ec2 instance"
-  policy_arn = file("mysql_iam_policy.json")
+
+resource "aws_iam_policy" "mysql" {
+  name   = local.mysql_policy_name
+  policy = file("${path.module}/mysql_iam_policy.json")
 }
 
-resource "aws_iam_role_policy" "mysql" {
-  role = aws_iam_role.mysql.name
+resource "aws_iam_role_policy_attachment" "mysql" {
+  role       = aws_iam_role.mysql.name
   policy_arn = aws_iam_policy.mysql.arn
 }
+
 resource "aws_iam_instance_profile" "mysql" {
   name = "${var.project}-${var.environment}-mysql"
   role = aws_iam_role.mysql.name
