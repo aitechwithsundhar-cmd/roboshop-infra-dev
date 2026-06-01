@@ -22,11 +22,7 @@ resource "aws_iam_role" "mysql" {
   )
 }
 resource "aws_iam_role_policy_attachment" "mysql" {
-  role       = aws_iam_role.mysql.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-resource "aws_iam_instance_profile" "mysql" {
-  name = local.mysql_role_name
-  role = aws_iam_role.mysql.name
+ name      = "S3ReadOnlyAccessPolicy"
+ description = " A policy for MySQL Ec2 instance"
+  policy_arn = file("mysql_iam_policy.json")
 }
