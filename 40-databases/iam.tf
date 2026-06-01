@@ -26,3 +26,8 @@ resource "aws_iam_role_policy_attachment" "mysql" {
  description = " A policy for MySQL Ec2 instance"
   policy_arn = file("mysql_iam_policy.json")
 }
+
+resource "aws_iam_role_policy" "mysql" {
+  role = aws_iam_role.mysql.name
+  policy_arn = aws_iam_policy.mysql.arn
+}
