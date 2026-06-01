@@ -45,20 +45,11 @@ resource "aws_security_group_rule" "redis_bastion" {
   security_group_id        = local.redis_sg_id
 }
 
-resource "aws_security_group_rule" "redis_catalogue" {
+resource "aws_security_group_rule" "mysql_bastion" {
   type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
+  from_port                = 22
+  to_port                  = 22
   protocol                 = "tcp"
-  source_security_group_id = local.catalogue_sg_id
-  security_group_id        = local.redis_sg_id
-}
-
-resource "aws_security_group_rule" "redis_user" {
-  type                     = "ingress"
-  from_port                = 6379
-  to_port                  = 6379
-  protocol                 = "tcp"
-  source_security_group_id = local.user_sg_id
-  security_group_id        = local.redis_sg_id
+  source_security_group_id = local.bastion_sg_id
+  security_group_id        = local.mysql_sg_id
 }
