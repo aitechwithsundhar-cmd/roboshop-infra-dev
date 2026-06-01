@@ -46,3 +46,14 @@ mysql:
     port: 3306
     src: shipping
     dest: mysql
+
+rabbitmq:
+  - name: rabbitmq_bastion
+    port: 22
+    src: bastion
+    dest: rabbitmq
+
+  - name: rabbitmq_cart
+    port: 5672
+    src: cart
+    dest: rabbitmq
