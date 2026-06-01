@@ -1,37 +1,48 @@
 bastion:
-- name: bastion_ssh # bastion accpeting connection from anywhere
-  port: 22
-  src: internet
-  dest : bastion
+  - name: bastion_ssh
+    port: 22
+    src: internet
+    dest: bastion
 
 mongodb:
-- name:mongodb_bastion # bastion accpeting connection from anywhere
-  port: 22
-  src: bastion
-  dest : mongodb
+  - name: mongodb_bastion
+    port: 22
+    src: bastion
+    dest: mongodb
 
-- name: mongodb_catalogue # mongodb accpeting connection from catalogue 
-  port: 27017
-  src: catalogue
-  dest: mongodb
+  - name: mongodb_catalogue
+    port: 27017
+    src: catalogue
+    dest: mongodb
 
-- name: mongodb_user # mongodb accpeting connection from catalogue 
-  port: 27017
-  src: user
-  dest: mongodb
+  - name: mongodb_user
+    port: 27017
+    src: user
+    dest: mongodb
 
 redis:
-- name: redis_bastion # bastion accpeting connection from anywhere
-  port: 22
-  src: bastion
-  dest : redis
+  - name: redis_bastion
+    port: 22
+    src: bastion
+    dest: redis
 
-- name: redis_catalogue # redis accpeting connection from catalogue 
-  port: 6379
-  src: catalogue
-  dest: redis
+  - name: redis_catalogue
+    port: 6379
+    src: catalogue
+    dest: redis
 
-- name: redis_user # redis accpeting connection from catalogue 
-  port: 6379
-  src: user
-  dest: redis
+  - name: redis_user
+    port: 6379
+    src: user
+    dest: redis
+
+mysql:
+  - name: mysql_bastion
+    port: 22
+    src: bastion
+    dest: mysql
+
+  - name: mysql_shipping
+    port: 3306
+    src: shipping
+    dest: mysql
