@@ -4,7 +4,6 @@ resource "aws_lb" "backend_alb" {
   load_balancer_type = "application"
   security_groups    = [local.backend_alb_sg_id]
   subnets            = local.private_subnet_ids
-}
 #keep it as false/ just to delete using terrafrom while practice 
 enable_deletion_protection = false
 
@@ -14,6 +13,7 @@ tags = merge(
     },
     local.common_tags
   )
+}
 
   resource "aws_lb_listener" "hhtp" {
     load_balancer_arn = aws_lb.backend_alb.arn
