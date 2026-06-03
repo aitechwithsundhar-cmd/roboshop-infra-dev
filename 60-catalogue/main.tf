@@ -3,7 +3,6 @@ resource "aws_instance" "catalogue" {
   instance_type          = "t3.micro"
   subnet_id              = local.private_subnet_ids
   vpc_security_group_ids = [local.catalogue_sg_id]
-}
 
  tags = merge(
   local.common_tags,
@@ -12,6 +11,8 @@ resource "aws_instance" "catalogue" {
     Component = "catalogue"
   }
 )
+}
+
 resource "terraform_data" "catalogue" {
     triggers_replace = [
         aws_instance.catalogue.id
@@ -35,7 +36,7 @@ resource "terraform_data" "catalogue" {
 }
 }
 
-action "awsec2_stop_instance" {
-  needs = ["aws_instance.catalogue"]
-  runs = "aws ec2 stop-instances --instance-ids ${aws_instance.catalogue.id} --region us-east-1"
-}
+# action "awsec2_stop_instance" {
+#   needs = ["aws_instance.catalogue"]
+#   runs = "aws ec2 stop-instances --instance-ids ${aws_instance.catalogue.id} --region us-east-1"
+# }
