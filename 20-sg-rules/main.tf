@@ -63,7 +63,7 @@ resource "aws_security_group_rule" "rabbitmq_bastion" {
   security_group_id        = local.rabbitmq_sg_id
 }
 
-resource "aws_security_group" "backend_alb_bastion" {
+resource "aws_security_group_rule" "backend_alb_bastion" {
   type                    = "ingress"
   from_port               = 80
   to_port                 = 80
