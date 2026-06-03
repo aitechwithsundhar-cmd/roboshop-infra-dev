@@ -6,12 +6,12 @@ resource "aws_instance" "mongodb" {
 
   tags = merge(
     {
-      Name = "${var.project}-${var.environment}-mongodb"
+      Name      = "${var.project}-${var.environment}-mongodb"
+      Component = "mongodb"
     },
     local.common_tags
   )
 }
-
 resource "terraform_data" "mongodb" {
     triggers_replace = [
         aws_instance.mongodb.id
@@ -43,12 +43,12 @@ resource "aws_instance" "redis" {
 
   tags = merge(
     {
-      Name = "${var.project}-${var.environment}-redis"
+      Name      = "${var.project}-${var.environment}-redis"
+      Component = "redis"
     },
     local.common_tags
   )
 }
-
 resource "terraform_data" "bootstrap_redis" {
     triggers_replace = [
         aws_instance.redis.id
@@ -72,6 +72,7 @@ resource "terraform_data" "bootstrap_redis" {
 }
 }
 
+
 resource "aws_instance" "mysql" {
   ami                    = local.ami_id
   instance_type          = "t3.micro"
@@ -81,12 +82,12 @@ resource "aws_instance" "mysql" {
 
   tags = merge(
     {
-      Name = "${var.project}-${var.environment}-mysql"
+      Name      = "${var.project}-${var.environment}-mysql"
+      Component = "mysql"
     },
     local.common_tags
   )
 }
-
 resource "terraform_data" "bootstrap_mysql" {
     triggers_replace = [
         aws_instance.mysql.id
@@ -117,7 +118,8 @@ resource "aws_instance" "rabbitmq" {
 
   tags = merge(
     {
-      Name = "${var.project}-${var.environment}-rabbitmq"
+      Name      = "${var.project}-${var.environment}-rabbitmq"
+      Component = "rabbitmq"
     },
     local.common_tags
   )

@@ -4,14 +4,13 @@ resource "aws_instance" "catalogue" {
   subnet_id              = local.private_subnet_ids
   vpc_security_group_ids = [local.catalogue_sg_id]
 
-  tags = merge(
-    {
-      Name = "${var.project}-${var.environment}-catalogue"
-    },
-    local.common_tags
-  )
-}
-
+ tags = merge(
+  local.common_tags,
+  {
+    Name      = "${var.project}-${var.environment}-catalogue"
+    Component = "catalogue"
+  }
+)
 resource "terraform_data" "catalogue" {
     triggers_replace = [
         aws_instance.catalogue.id
@@ -33,4 +32,9 @@ resource "terraform_data" "catalogue" {
     "sudo sh /tmp/bootstrap-host.sh catalogue dev"
   ]
 }
+}
+
+action "awsec2_stop_instance" {
+  needs = ["aws_instance.catalogue"]
+  runs = "aws ec2 stop-instances --instance-ids ${aws_instance.catalogue.id} --region us-east-1"
 }
