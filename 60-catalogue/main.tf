@@ -35,8 +35,3 @@ resource "terraform_data" "catalogue" {
   ]
 }
 }
-
-# action "awsec2_stop_instance" {
-#   needs = ["aws_instance.catalogue"]
-#   runs = "aws ec2 stop-instances --instance-ids ${aws_instance.catalogue.id} --region us-east-1"
-# }
