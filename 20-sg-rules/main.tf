@@ -70,4 +70,5 @@ resource "aws_security_group" "backend_alb_bastion" {
   protocol                = "tcp"
   source_security_group_id = local.bastion_sg_id
   security_group_id       = local.backend_albsg_id
+}
 
