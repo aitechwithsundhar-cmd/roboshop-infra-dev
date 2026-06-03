@@ -3,16 +3,15 @@ resource "aws_instance" "catalogue" {
   instance_type          = "t3.micro"
   subnet_id              = local.private_subnet_ids
   vpc_security_group_ids = [local.catalogue_sg_id]
-
- tags = merge(
-  local.common_tags,
-  {
-    Name      = "${var.project}-${var.environment}-catalogue"
-    Component = "catalogue"
-  }
-)
+  tags = merge(
+    
+    local.common_tags,
+    {
+      Name      = "${var.project}-${var.environment}-catalogue"
+      Component = "catalogue"
+    }
+  )
 }
-
 resource "terraform_data" "catalogue" {
     triggers_replace = [
         aws_instance.catalogue.id
