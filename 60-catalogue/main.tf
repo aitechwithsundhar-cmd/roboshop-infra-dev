@@ -4,7 +4,7 @@ resource "aws_instance" "catalogue" {
   subnet_id              = local.private_subnet_ids
   vpc_security_group_ids = [local.catalogue_sg_id]
   tags = merge(
-    
+
     local.common_tags,
     {
       Name      = "${var.project}-${var.environment}-catalogue"
@@ -33,4 +33,23 @@ resource "terraform_data" "catalogue" {
     "sudo sh /tmp/bootstrap-host.sh catalogue dev"
   ]
 }
+}
+resource "aws_ec2_instance_state" "catalogue" {
+  instance_id = aws_instance.catalogue.id
+  state       = "stopped"
+}
+
+resourse "aws_ami_instance_state" "catalogue" {
+    name               = "${var.project}-${var.environment}-catalogue-ami"
+    source_instance_id = aws_instance.catalogue.id
+    description        = "AMI for ${var.project} ${var.environment} catalogue component"
+    tags = merge(
+        local.common_tags,
+        {
+        Name      = "${var.project}-${var.environment}-catalogue-ami"
+        Component = "catalogue"
+        }
+    )
+
+
 }
