@@ -24,7 +24,7 @@ resource "terraform_data" "catalogue" {
     }
     provisioner "file" {
         source      = "bootstrap.sh"
-        destination = "/tmp/bootstrap-host.sh"
+        destination = "/tmp/bootstrap-host.sh ${var.environment} ${var.app_version}"
     }
 
     provisioner "remote-exec" {
@@ -41,7 +41,7 @@ resource "aws_ec2_instance_state" "catalogue" {
 }
 
 resource "aws_ami_from_instance" "catalogue" {
-    name               = "${var.project}-${var.environment}-catalogue-ami"
+    name               = "${var.project}-${var.environment}-catalogue-${var.app_version}-${aws_instance.catalogue.id}"
     source_instance_id = aws_instance.catalogue.id
     depends_on = [aws_ec2_instance_state.catalogue]
     description        = "AMI for ${var.project} ${var.environment} catalogue component"
@@ -208,4 +208,4 @@ resource "terraform_data" "catalogue_delete" {
     provisioner "local-exec" {
 command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id}"
     }
-}
+}                       
