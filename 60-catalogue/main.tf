@@ -191,7 +191,7 @@ resource "aws_lb_listener_rule" "catalogue" {
   }
   condition {
     path_pattern {
-      values = values = ["/catalogue*"]
+      values = ["/catalogue*"]
     }
   }
 }
