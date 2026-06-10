@@ -147,21 +147,21 @@ resource "aws_autoscaling_group" "catalogue" {
     triggers = ["launch_template"]
   }
 
-  dynamic "tag" {
-    for_each = merge(
-      {
-        Name      = "${var.project}-${var.environment}-catalogue"
-        Component = "catalogue"
-      },
-      local.common_tags
-    )
+dynamic "tag" {
+  for_each = merge(
+    {
+      Name      = "${var.project}-${var.environment}-catalogue"
+      Component = "catalogue"
+    },
+    local.common_tags
+  )
 
-    content {
-      key                 = each.key
-      value               = each.value
-      propagate_at_launch = true
-    }
+  content {
+    key                 = tag.key
+    value               = tag.value
+    propagate_at_launch = true
   }
+}
 
   timeouts {
     delete = "15m"
