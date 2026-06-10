@@ -185,7 +185,7 @@ resource "aws_autoscaling_policy" "catalogue_scale_out" {
 # listener rules to forward traffic to target group
 resource "aws_lb_listener_rule" "catalogue" {
   listener_arn = local.backend_alb_listener_arn
-  priority     = 100
+  priority     = 10
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.catalogue.arn
