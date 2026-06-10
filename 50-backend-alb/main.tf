@@ -15,7 +15,7 @@ resource "aws_lb" "backend_alb" {
   )
 }
 
-resource "aws_lb_listener" "hhtp" {
+resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.backend_alb.arn
   port              = 80
   protocol          = "HTTP"
