@@ -1,7 +1,7 @@
 resource "aws_instance" "catalogue" {
   ami                    = local.ami_id
   instance_type          = "t3.micro"
-  subnet_id              = local.private_subnet_ids
+  subnet_id              = local.private_subnet_ids[0]
   vpc_security_group_ids = [local.catalogue_sg_id]
   tags = merge(
 
@@ -127,22 +127,23 @@ resource "aws_autoscaling_group" "catalogue" {
   health_check_grace_period = 120
   health_check_type         = "ELB"
   desired_capacity          = 1
-  force_delete               = false
+  force_delete              = false
 
   launch_template {
     id      = aws_launch_template.catalogue.id
     version = "$Latest"
   }
-}
 
-  vpc_zone_identifier = [local.private_subnet_ids]
-  target_group_arns  = [aws_lb_target_group.catalogue.arn]
+  vpc_zone_identifier = local.private_subnet_ids
+  target_group_arns   = [aws_lb_target_group.catalogue.arn]
 
   instance_refresh {
     strategy = "Rolling"
+
     preferences {
       min_healthy_percentage = 50
     }
+
     triggers = ["launch_template"]
   }
 
@@ -154,12 +155,14 @@ resource "aws_autoscaling_group" "catalogue" {
       },
       local.common_tags
     )
+
     content {
       key                 = each.key
       value               = each.value
-      propagate_at_launch = true 
+      propagate_at_launch = true
+    }
   }
-  # with in 15min autoscalinf should be successful
+
   timeouts {
     delete = "15m"
   }
@@ -188,7 +191,7 @@ resource "aws_lb_listener_rule" "catalogue" {
   }
   condition {
     path_pattern {
-      values = ["/catalogue.backend-${var.environment}.${var.domain_name}"]
+      values = values = ["/catalogue*"]
     }
   }
 }
@@ -198,9 +201,9 @@ resource "terraform_data" "catalogue_delete" {
     triggers_replace = [
         aws_instance.catalogue.id
     ]
-    depends_on = [aws_autoscaling_policy.catalogue]
+    depends_on = [aws_autoscaling_policy.catalogue_scale_out]
 # it excutes in bastion 
     provisioner "local-exec" {
-        command = "aws ec2 terminate-instances ${aws_instance.catalogue.id}"
+command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id}"
     }
 }
