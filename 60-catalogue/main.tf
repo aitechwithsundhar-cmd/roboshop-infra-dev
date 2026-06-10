@@ -190,10 +190,11 @@ resource "aws_lb_listener_rule" "catalogue" {
     target_group_arn = aws_lb_target_group.catalogue.arn
   }
   condition {
-    path_pattern {
-      values = ["/catalogue*"]
+    host_header {
+      values = ["catalogue.backend-${var.environment}.${var.domain_name}"]
     }
-  }
+
+}
 }
 
 # aws command to destory instance 
