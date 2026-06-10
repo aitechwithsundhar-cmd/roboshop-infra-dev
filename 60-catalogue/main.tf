@@ -133,22 +133,74 @@ resource "aws_autoscaling_group" "catalogue" {
     id      = aws_launch_template.catalogue.id
     version = "$Latest"
   }
+}
 
   vpc_zone_identifier = [local.private_subnet_ids]
   target_group_arns  = [aws_lb_target_group.catalogue.arn]
 
-  tag {
-    key                = "Name"
-    value               = "${var.project}-${var.environment}-catalogue"
-    propagate_at_launch = true
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
   }
+
+  dynamic "tag" {
+    for_each = merge(
+      {
+        Name      = "${var.project}-${var.environment}-catalogue"
+        Component = "catalogue"
+      },
+      local.common_tags
+    )
+    content {
+      key                 = each.key
+      value               = each.value
+      propagate_at_launch = true 
+  }
+  # with in 15min autoscalinf should be successful
   timeouts {
     delete = "15m"
   }
+}
 
-  tag {
-    key                = "Component"
-    value               = "catalogue"
-    propagate_at_launch = true
+# auto scaling policy to scale out when cpu utilization is more than 70% for 5 min
+resource "aws_autoscaling_policy" "catalogue_scale_out" {
+  name                   = "${var.project}-${var.environment}-catalogue"
+  autoscaling_group_name = aws_autoscaling_group.catalogue.name
+  policy_type            = "TargetTrackingScaling"  
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 70.0
   }
+}
+
+# listener rules to forward traffic to target group
+resource "aws_lb_listener_rule" "catalogue" {
+  listener_arn = local.backend_alb_listener_arn
+  priority     = 100
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.catalogue.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/catalogue.backend-${var.environment}.${var.domain_name}"]
+    }
+  }
+}
+
+# aws command to destory instance 
+resource "terraform_data" "catalogue_delete" {
+    triggers_replace = [
+        aws_instance.catalogue.id
+    ]
+    depends_on = [aws_autoscaling_policy.catalogue]
+# it excutes in bastion 
+    provisioner "local-exec" {
+        command = "aws ec2 terminate-instances ${aws_instance.catalogue.id}"
+    }
 }
