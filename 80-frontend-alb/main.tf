@@ -34,7 +34,7 @@ resource "aws_lb_listener" "https" {
 
 resource "aws_route53_record" "www" {
   zone_id = var.zone_id
-  name    = "*.frontend-${var.environment}.${var.domain_name}"
+  name    = "*.${var.domain_name}"
   type    = "A"
 
   #load_balancer details
@@ -43,4 +43,5 @@ resource "aws_route53_record" "www" {
     zone_id                = aws_lb.frontend _alb.zone_id
     evaluate_target_health = true
   }
+  allow_overwrite = true
 }
