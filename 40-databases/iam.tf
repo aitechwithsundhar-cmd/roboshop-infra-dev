@@ -23,7 +23,7 @@ resource "aws_iam_role" "mysql" {
 }
 
 resource "aws_iam_policy" "mysql" {
-  name   = local.mysql_policy_name
+  name = local.mysql_policy_name
   policy = templatefile("${path.module}/mysql_iam_policy.json", {
     environment = var.environment
   })

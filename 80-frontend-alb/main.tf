@@ -40,7 +40,7 @@ resource "aws_route53_record" "www" {
   #load_balancer details
   alias {
     name                   = aws_lb.frontend_alb.dns_name
-    zone_id                = aws_lb.frontend _alb.zone_id
+    zone_id                = aws_lb.frontend_alb.zone_id
     evaluate_target_health = true
   }
   allow_overwrite = true

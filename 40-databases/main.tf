@@ -13,26 +13,26 @@ resource "aws_instance" "mongodb" {
   )
 }
 resource "terraform_data" "mongodb" {
-    triggers_replace = [
-        aws_instance.mongodb.id
-    ]
-    connection {
-        type        = "ssh"
-        user        = "ec2-user"
-        password    = "DevOps321"
-        host        = aws_instance.mongodb.private_ip
-    }
-    provisioner "file" {
-        source      = "bootstrap.sh"
-        destination = "/tmp/bootstrap-host.sh"
-    }
-
-    provisioner "remote-exec" {
-  inline = [
-    "chmod +x /tmp/bootstrap-host.sh",
-    "sudo sh /tmp/bootstrap-host.sh mongodb"
+  triggers_replace = [
+    aws_instance.mongodb.id
   ]
-}
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.mongodb.private_ip
+  }
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/bootstrap-host.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap-host.sh",
+      "sudo sh /tmp/bootstrap-host.sh mongodb"
+    ]
+  }
 }
 
 resource "aws_instance" "redis" {
@@ -50,26 +50,26 @@ resource "aws_instance" "redis" {
   )
 }
 resource "terraform_data" "bootstrap_redis" {
-    triggers_replace = [
-        aws_instance.redis.id
-    ]
-    connection {
-        type        = "ssh"
-        user        = "ec2-user"
-        password    = "DevOps321"
-        host        = aws_instance.redis.private_ip
-    }
-    provisioner "file" {
-        source      = "bootstrap.sh"
-        destination = "/tmp/bootstrap-host.sh"
-    }
-
-    provisioner "remote-exec" {
-  inline = [
-    "chmod +x /tmp/bootstrap-host.sh",
-    "sudo sh /tmp/bootstrap-host.sh redis"
+  triggers_replace = [
+    aws_instance.redis.id
   ]
-}
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.redis.private_ip
+  }
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/bootstrap-host.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap-host.sh",
+      "sudo sh /tmp/bootstrap-host.sh redis"
+    ]
+  }
 }
 
 
@@ -89,26 +89,26 @@ resource "aws_instance" "mysql" {
   )
 }
 resource "terraform_data" "bootstrap_mysql" {
-    triggers_replace = [
-        aws_instance.mysql.id
-    ]
-    connection {
-        type        = "ssh"
-        user        = "ec2-user"
-        password    = "DevOps321"
-        host        = aws_instance.mysql.private_ip
-    }
-    provisioner "file" {
-        source      = "bootstrap.sh"
-        destination = "/tmp/bootstrap-host.sh"
-    }
-
-    provisioner "remote-exec" {
-  inline = [
-    "chmod +x /tmp/bootstrap-host.sh",
-    "sudo sh /tmp/bootstrap-host.sh mysql ${var.environment}"
+  triggers_replace = [
+    aws_instance.mysql.id
   ]
-}
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.mysql.private_ip
+  }
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/bootstrap-host.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap-host.sh",
+      "sudo sh /tmp/bootstrap-host.sh mysql ${var.environment}"
+    ]
+  }
 }
 resource "aws_instance" "rabbitmq" {
   ami                    = local.ami_id
@@ -125,24 +125,24 @@ resource "aws_instance" "rabbitmq" {
   )
 }
 resource "terraform_data" "rabbitmq" {
-    triggers_replace = [
-        aws_instance.rabbitmq.id
-    ]
-    connection {
-        type        = "ssh"
-        user        = "ec2-user"
-        password    = "DevOps321"
-        host        = aws_instance.rabbitmq.private_ip
-    }
-    provisioner "file" {
-        source      = "bootstrap.sh"
-        destination = "/tmp/bootstrap-host.sh"
-    }
+  triggers_replace = [
+    aws_instance.rabbitmq.id
+  ]
+  connection {
+    type     = "ssh"
+    user     = "ec2-user"
+    password = "DevOps321"
+    host     = aws_instance.rabbitmq.private_ip
+  }
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/bootstrap-host.sh"
+  }
 
-    provisioner "remote-exec" {
-  inline = [
-    "chmod +x /tmp/bootstrap-host.sh",
-    "sudo sh /tmp/bootstrap-host.sh rabbitmq ${var.environment}"
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/bootstrap-host.sh",
+      "sudo sh /tmp/bootstrap-host.sh rabbitmq ${var.environment}"
     ]
   }
 }
