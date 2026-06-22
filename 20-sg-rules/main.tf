@@ -300,7 +300,6 @@ resource "aws_security_group_rule" "frontend_bastion" {
   source_security_group_id = local.bastion_sg_id
   security_group_id        = local.frontend_sg_id
 }
-
 # FRONTEND ALB RULES
 # Allow HTTPS traffic from anywhere
 # on the internet to Frontend ALB.
